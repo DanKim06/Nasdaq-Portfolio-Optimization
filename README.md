@@ -67,3 +67,31 @@ real analysis rather than a black box)
 - Add a rolling covariance shrinkage estimator (Ledoit-Wolf) to address the
   estimation-error problem noted above.
 - Add sector-neutral constraints.
+
+## Results
+
+Backtest period: 2019-01-02 to 2023-12-29, walk-forward with quarterly
+rebalancing (weights re-optimized each quarter using only trailing data,
+no look-ahead bias).
+
+| Strategy       | Total Return | Annualized Return | Sharpe Ratio | Max Drawdown |
+|----------------|-------------:|-------------------:|-------------:|-------------:|
+| Equal Weight   | 290.5%       | 31.4%              | **1.027**    | -44.9%       |
+| Max Sharpe     | 272.3%       | 30.2%              | 0.999        | -43.6%       |
+| Min Volatility | 224.2%       | 26.6%              | 0.933        | -36.4%       |
+| QQQ (benchmark)| 182.5%       | 23.2%              | 0.834        | -35.1%       |
+
+![Backtest performance](output/backtest_performance.png)
+![Efficient frontier](output/efficient_frontier.png)
+
+**Key finding:** all three stock-picking strategies outperformed QQQ on a
+risk-adjusted basis — but naive equal-weighting slightly outperformed both
+mean-variance optimized portfolios out-of-sample. This echoes a well-known
+result in the literature (DeMiguel, Garlappi & Uppal, 2009): mean-variance
+optimization is highly sensitive to estimation error in expected returns,
+and that sensitivity can erase its theoretical edge over a much simpler
+1/N allocation once you test out-of-sample rather than in-sample.
+
+The Min Volatility portfolio did deliver the lowest drawdown (-36.4%),
+consistent with its objective — it sacrificed some return for more
+stability, exactly as designed.
